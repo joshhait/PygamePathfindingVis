@@ -183,4 +183,51 @@ class Grid:
                 if node != self.getTarget():
                     self.grid[node[0]][node[1]] = 6
 
-        return []
+    def DFS(self):
+            """
+                Uses DFS to find path from source node to target node.
+                TODO: add visuals (i.e. change values  of grid so that draw shows it "visualizing")
+            """
+            if self.source == (None, None) or self.target == (None, None):
+                print("Source or Target is not set! Aborting BFS...")
+                return False
+
+            targetFound = False
+
+            explored, path = [], []
+
+            startPos = self.getSource()
+
+            fringe = util.Stack()
+
+            fringe.push((startPos, path))
+
+            while not fringe.isEmpty():
+                currNode, currPath = fringe.pop()
+
+                if currNode in explored:
+                    continue
+
+                explored.append(currNode)
+                if currNode != self.getSource() and currNode != self.getTarget():
+                    self.grid[currNode[0]][currNode[1]] = 4
+
+                if self.isTarget(currNode):
+                    targetFound = True
+                    break
+
+                for succ in self.getSuccessors(currNode):
+                    nextXY = succ[0]
+                    nextDir = succ[1]
+                    nextCost = succ[2]
+                    if nextXY != self.getSource() and nextXY != self.getTarget():
+                        self.grid[nextXY[0]][nextXY[1]] = 5
+
+                    pathToSucc = currPath + [nextXY]
+
+                    fringe.push((nextXY, pathToSucc))
+
+            if targetFound:
+                for node in currPath:
+                    if node != self.getTarget():
+                        self.grid[node[0]][node[1]] = 6

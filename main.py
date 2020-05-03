@@ -102,6 +102,8 @@ def main():
                             grid.setTarget(row, col)
                 elif event.key == pygame.K_1:
                     grid.BFS()
+                elif event.key == pygame.K_2:
+                    grid.DFS()
 
         # tock here and update tick to tock
 
