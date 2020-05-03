@@ -4,12 +4,12 @@ Shows a visualization of Pathfinding Algorithms from a source node to a target n
 
 ## Color Dictionary
 
-White       - Empty Square
-Black       - Wall
-Green       - Source
-Red         - Target
-Dark Blue   - Searched Node
-Light Blue  - Discovered Node
+White       - Empty Square.
+Black       - Wall.
+Green       - Source.
+Red         - Target.
+Dark Blue   - Searched Node.
+Light Blue  - Discovered Node.
 
 ## Controls
 
