@@ -25,4 +25,4 @@ Shows a visualization of Pathfinding Algorithms from a source node to a target n
 
 ## How to Run
 
-` python main.py `
+Run with: `python main.py `
