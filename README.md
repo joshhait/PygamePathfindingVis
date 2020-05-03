@@ -13,13 +13,6 @@ Shows a visualization of Pathfinding Algorithms from a source node to a target n
 | Dark Blue |  Searched Node  |
 | Light Blue |  Discovered Node  |
 
-White       - Empty Square.
-Black       - Wall.
-Green       - Source.
-Red         - Target.
-Dark Blue   - Searched Node.
-Light Blue  - Discovered Node.
-
 ## Controls
 
 |  Button |     Action   |
@@ -29,3 +22,7 @@ Light Blue  - Discovered Node.
 |    R    |      Reset   |
 |    1    |    Run BFS   |
 |   Click |  Place Wall  |
+
+## How to Run
+
+` python main.py `
