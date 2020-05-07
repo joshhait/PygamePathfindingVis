@@ -101,9 +101,9 @@ def main():
                             grid.removeTarget()
                             grid.setTarget(row, col)
                 elif event.key == pygame.K_1:
-                    grid.BFS()
+                    grid.BFS(screen, clock)
                 elif event.key == pygame.K_2:
-                    grid.DFS()
+                    grid.DFS(screen, clock)
 
         # tock here and update tick to tock
 

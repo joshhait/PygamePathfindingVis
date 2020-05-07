@@ -120,21 +120,21 @@ class Grid:
             pos = (row-1, col)
             north = (pos, 'North', 1)
             successors.append(north)
-        if row + 1 < self.rows and self.grid[row+1][col] != 1:
-            pos = (row+1, col)
-            south = (pos, 'South', 1)
-            successors.append(south)
         if col + 1 < self.cols and self.grid[row][col+1] != 1:
             pos = (row, col+1)
             east = (pos, 'East', 1)
             successors.append(east)
+        if row + 1 < self.rows and self.grid[row+1][col] != 1:
+            pos = (row+1, col)
+            south = (pos, 'South', 1)
+            successors.append(south)
         if col - 1 >= 0 and self.grid[row][col-1] != 1:
             pos = (row, col-1)
             west = (pos, 'West', 1)
             successors.append(west)
         return successors
 
-    def BFS(self):
+    def BFS(self, screen, clock):
         """
             Uses BFS to find path from source node to target node.
             TODO: add visuals (i.e. change values  of grid so that draw shows it "visualizing")
@@ -160,8 +160,6 @@ class Grid:
                 continue
 
             explored.append(currNode)
-            if currNode != self.getSource() and currNode != self.getTarget():
-                self.grid[currNode[0]][currNode[1]] = 4
 
             if self.isTarget(currNode):
                 targetFound = True
@@ -171,19 +169,30 @@ class Grid:
                 nextXY = succ[0]
                 nextDir = succ[1]
                 nextCost = succ[2]
-                if nextXY != self.getSource() and nextXY != self.getTarget():
-                    self.grid[nextXY[0]][nextXY[1]] = 5
+                if nextXY != self.getSource() and nextXY != self.getTarget() and self.grid[nextXY[0]][nextXY[1]] == 0:
+                    self.grid[nextXY[0]][nextXY[1]] = 4
+                    screen.fill((105, 105, 105))
+                    self.drawGrid(screen)
+                    pygame.display.flip()
+                    clock.tick(60)
 
                 pathToSucc = currPath + [nextXY]
 
                 fringe.push((nextXY, pathToSucc))
+
+            if currNode != self.getSource() and currNode != self.getTarget():
+                self.grid[currNode[0]][currNode[1]] = 5
+                screen.fill((105, 105, 105))
+                self.drawGrid(screen)
+                pygame.display.flip()
+                clock.tick(60)
 
         if targetFound:
             for node in currPath:
                 if node != self.getTarget():
                     self.grid[node[0]][node[1]] = 6
 
-    def DFS(self):
+    def DFS(self, screen, clock):
             """
                 Uses DFS to find path from source node to target node.
                 TODO: add visuals (i.e. change values  of grid so that draw shows it "visualizing")
@@ -209,8 +218,6 @@ class Grid:
                     continue
 
                 explored.append(currNode)
-                if currNode != self.getSource() and currNode != self.getTarget():
-                    self.grid[currNode[0]][currNode[1]] = 4
 
                 if self.isTarget(currNode):
                     targetFound = True
@@ -220,12 +227,23 @@ class Grid:
                     nextXY = succ[0]
                     nextDir = succ[1]
                     nextCost = succ[2]
-                    if nextXY != self.getSource() and nextXY != self.getTarget():
-                        self.grid[nextXY[0]][nextXY[1]] = 5
+                    if nextXY != self.getSource() and nextXY != self.getTarget() and self.grid[nextXY[0]][nextXY[1]] == 0:
+                        self.grid[nextXY[0]][nextXY[1]] = 4
+                        screen.fill((105, 105, 105))
+                        self.drawGrid(screen)
+                        pygame.display.flip()
+                        clock.tick(60)
 
                     pathToSucc = currPath + [nextXY]
 
                     fringe.push((nextXY, pathToSucc))
+
+                if currNode != self.getSource() and currNode != self.getTarget():
+                    self.grid[currNode[0]][currNode[1]] = 5
+                    screen.fill((105, 105, 105))
+                    self.drawGrid(screen)
+                    pygame.display.flip()
+                    clock.tick(60)
 
             if targetFound:
                 for node in currPath:
