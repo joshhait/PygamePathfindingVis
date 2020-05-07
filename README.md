@@ -22,6 +22,7 @@ Shows a visualization of Pathfinding Algorithms from a source node to a target n
 |    R    |      Reset   |
 |    1    |    Run BFS   |
 |    2    |    Run DFS   |
+|    3    |    Run A*   |
 |   Click |  Place Wall  |
 
 ## How to Run

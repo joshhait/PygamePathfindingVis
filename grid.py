@@ -43,7 +43,7 @@ class Grid:
         """
         if self.grid[row][col] != 2 and self.grid[row][col] != 3:
             self.grid[row][col] = 1
-            print("Wall set at (", row, ", ", col, ")")
+            #print("Wall set at (", row, ", ", col, ")")
     
     def removeWall(self, row, col):
         self.grid[row][col] = 0
@@ -154,6 +154,8 @@ class Grid:
         fringe.push((startPos, path))
 
         while not fringe.isEmpty():
+            pygame.event.pump()
+
             currNode, currPath = fringe.pop()
 
             if currNode in explored:
@@ -198,7 +200,7 @@ class Grid:
                 TODO: add visuals (i.e. change values  of grid so that draw shows it "visualizing")
             """
             if self.source == (None, None) or self.target == (None, None):
-                print("Source or Target is not set! Aborting BFS...")
+                print("Source or Target is not set! Aborting DFS...")
                 return False
 
             targetFound = False
@@ -212,6 +214,7 @@ class Grid:
             fringe.push((startPos, path))
 
             while not fringe.isEmpty():
+                pygame.event.pump()
                 currNode, currPath = fringe.pop()
 
                 if currNode in explored:
@@ -249,3 +252,73 @@ class Grid:
                 for node in currPath:
                     if node != self.getTarget():
                         self.grid[node[0]][node[1]] = 6
+
+    def aStarSearch(self, screen, clock):
+        if self.source == (None, None) or self.target == (None, None):
+            print("Source or Target is not set! Aborting BFS...")
+            return False
+
+        targetFound = False
+
+        explored, path = [], []
+
+        startPos = self.getSource()
+
+        fringe = util.PriorityQueue()
+
+        fringe.push((startPos, path), self.manhattanHeuristic(startPos))
+
+        while not fringe.isEmpty():
+            pygame.event.pump()
+            currNode, currPath = fringe.pop()
+
+            if currNode in explored:
+                continue
+
+            explored.append(currNode)
+
+            if self.isTarget(currNode):
+                targetFound = True
+                break
+
+            for succ in self.getSuccessors(currNode):
+                nextXY = succ[0]
+                nextDir = succ[1]
+                nextCost = succ[2]
+                if nextXY != self.getSource() and nextXY != self.getTarget() and self.grid[nextXY[0]][nextXY[1]] == 0:
+                    self.grid[nextXY[0]][nextXY[1]] = 4
+                    screen.fill((105, 105, 105))
+                    self.drawGrid(screen)
+                    pygame.display.flip()
+                    clock.tick(60)
+
+                pathToSucc = currPath + [nextXY]
+
+                gn = self.getCostOfActions(pathToSucc)
+                hn = self.manhattanHeuristic(nextXY)
+                fn = gn + hn 
+
+                fringe.push((nextXY, pathToSucc), fn)
+
+            if currNode != self.getSource() and currNode != self.getTarget():
+                self.grid[currNode[0]][currNode[1]] = 5
+                screen.fill((105, 105, 105))
+                self.drawGrid(screen)
+                pygame.display.flip()
+                clock.tick(60)
+
+        if targetFound:
+            for node in currPath:
+                if node != self.getTarget():
+                    self.grid[node[0]][node[1]] = 6
+
+    def manhattanHeuristic(self, pos):
+        xy1 = pos
+        xy2 = self.getTarget()
+        return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
+
+    def getCostOfActions(self, actions):
+        cost = 0
+        for action in actions:
+            cost += 1
+        return cost

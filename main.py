@@ -78,8 +78,8 @@ def main():
                             grid.removeSource()
                             grid.setSource(row, col)
                     node = (row, col)
-                    print(grid.getSuccessors(node))
-                    print("rows: ", grid.getRows(), " | cols: ", grid.getCols())
+                    #print(grid.getSuccessors(node))
+                    #print("rows: ", grid.getRows(), " | cols: ", grid.getCols())
                 # Pressing the t key sets the target square
                 elif event.key == pygame.K_t:
 
@@ -104,6 +104,8 @@ def main():
                     grid.BFS(screen, clock)
                 elif event.key == pygame.K_2:
                     grid.DFS(screen, clock)
+                elif event.key == pygame.K_3:
+                    grid.aStarSearch(screen, clock)
 
         # tock here and update tick to tock
 
