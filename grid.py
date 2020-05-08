@@ -34,9 +34,6 @@ class Grid:
     def getElement(self, row, col):
         return self.grid[row][col]
 
-    def setElement(self, row, col, val):
-        self.grid[row][col] = val
-
     def setWall(self, row, col):
         """
             Sets a wall at grid[row][col]. Can't set a wall on top of the source/target square.
@@ -54,12 +51,24 @@ class Grid:
     def getCols(self):
         return self.cols
 
-    def reset(self):
+    def clear(self):
+        """
+            Clears the entire board. All tiles will be empty.
+        """
         for row in range(self.rows):
             for col in range(self.cols):
                 self.grid[row][col] = 0
         self.source = (None, None)
         self.target = (None, None)
+
+    def reset(self):
+        """
+            Clears the board of any search paths, leaving only target, source, and walls
+        """
+        for row in range(self.rows):
+            for col in range(self.cols):
+                if self.grid[row][col] != 1 and self.grid[row][col] != 2 and self.grid[row][col] != 3:
+                    self.grid[row][col] = 0
     
     def getSource(self):
         return self.source

@@ -7,7 +7,10 @@ from grid import Grid
 Pathfinding Algorithms todo: BFS, DFS, Astar, Dijkstras
 
 Project TODO:
-    - probably need to expand the grid to be a list of lists of node objects, we'll see once we start implementing pathfinding
+    - Add event handling to inside the algorithms running
+    - Move setting source/target code to grid.py
+    - Get rid of useless comments
+    - implement dijkstras
 
 '''
 
@@ -55,7 +58,9 @@ def main():
                 drag = False
             elif event.type == pygame.KEYDOWN:
                 # Pressing the r key resets the entire grid
-                if event.key == pygame.K_r:
+                if event.key == pygame.K_c:
+                    grid.clear()
+                elif event.key == pygame.K_r:
                     grid.reset()
                 # Pressing the s key sets the source square
                 elif event.key == pygame.K_s:
@@ -77,9 +82,7 @@ def main():
                         elif grid.getElement(row, col) == 0 or grid.getElement(row, col) == 1:
                             grid.removeSource()
                             grid.setSource(row, col)
-                    node = (row, col)
-                    #print(grid.getSuccessors(node))
-                    #print("rows: ", grid.getRows(), " | cols: ", grid.getCols())
+                            
                 # Pressing the t key sets the target square
                 elif event.key == pygame.K_t:
 
