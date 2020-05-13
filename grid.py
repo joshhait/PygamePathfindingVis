@@ -28,12 +28,6 @@ class Grid:
         self.cellHeight = CELL_DIM[1]
         self.cellMargin = CELL_DIM[2]
 
-    def getGrid(self):
-        return self.grid
-
-    def getElement(self, row, col):
-        return self.grid[row][col]
-
     def setWall(self, row, col):
         """
             Sets a wall at grid[row][col]. Can't set a wall on top of the source/target square.
@@ -44,12 +38,6 @@ class Grid:
     
     def removeWall(self, row, col):
         self.grid[row][col] = 0
-
-    def getRows(self):
-        return self.rows
-
-    def getCols(self):
-        return self.cols
 
     def clear(self):
         """
@@ -83,6 +71,23 @@ class Grid:
         self.grid[row][col] = 0
         self.source = (None, None)
 
+    def toggleSource(self, row, col):
+        """
+            Togggles the Source Tile. If the source is not set, sets it. If the source is set, removes it if Source == (row, col), or moves it to (row, col) otherwise.
+        """
+        # if the source is not set, set it
+        if self.getSource() == (None, None):
+            self.setSource(row, col)
+        # if the source is set
+        else:
+            # if the source is the current square, remove it
+            if self.grid[row][col] == 2:
+                self.removeSource()
+            # if the source is not the current square, remove it, and make current square the source
+            elif self.grid[row][col] == 0 or self.grid[row][col] == 1:
+                self.removeSource()
+                self.setSource(row, col)
+
     def getTarget(self):
         return self.target
 
@@ -96,7 +101,28 @@ class Grid:
         self.grid[row][col] = 0
         self.target = (None, None)
 
+
+    def toggleTarget(self, row, col):
+        """
+            Togggles the Target Tile. If the target is not set, sets it. If the target is set, removes it if Target == (row, col), or moves it to (row, col) otherwise.
+        """
+        # if the target is not set, set it
+        if self.getTarget() == (None, None):
+            self.setTarget(row, col)
+        # if the target is set
+        else:
+            # if the target is the current square, remove it
+            if self.grid[row][col] == 3:
+                self.removeTarget()
+            # if the target is not the current square, remove it, and make current square the target
+            elif self.grid[row][col] == 0  or self.grid[row][col] == 1: 
+                self.removeTarget()
+                self.setTarget(row, col)
+
     def isTarget(self, node):
+        """
+            Returns true if Node = (row, col) is the target, else returns false.
+        """
         return (node == self.target)
 
     def drawGrid(self, screen):
@@ -123,6 +149,9 @@ class Grid:
                                     self.cellHeight])
 
     def getSuccessors(self, node):
+        """
+            Auxiliary function for search algorithms. Returns list of valid adjacent nodes to the input node.
+        """
         row, col = node[0], node[1]
         successors = []
         if row - 1 >= 0 and self.grid[row-1][col] != 1:

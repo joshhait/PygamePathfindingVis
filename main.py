@@ -2,20 +2,13 @@ import pygame
 import math
 from grid import Grid
 
-
 '''
-Pathfinding Algorithms todo: BFS, DFS, Astar, Dijkstras
-
 Project TODO:
     - Add event handling to inside the algorithms running
-    - Move setting source/target code to grid.py
-    - Get rid of useless comments
-    - implement dijkstras
 
 '''
 
 def main():
-    # Width and height of the window
     WIN_SIZE = (800, 600)
 
     # Dimensions for Cells
@@ -24,10 +17,8 @@ def main():
 
     grid = Grid(WIN_SIZE, CELL_DIM)
 
-    # initialize pygame
+    # initalize pygame window
     pygame.init()
-
-    # set up the screen and screen caption
     screen = pygame.display.set_mode(WIN_SIZE)
     pygame.display.set_caption("Pathfinding Visualizer")
 
@@ -36,26 +27,26 @@ def main():
 
     isRunning = True
 
-    drag = False
+    mouseDragging = False
 
     while isRunning:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 isRunning = False
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                drag = True
+                mouseDragging = True
                 pos = pygame.mouse.get_pos()
                 col = pos[0] // (CELL_DIM[0] + CELL_DIM[2])
                 row = pos[1] // (CELL_DIM[1] + CELL_DIM[2])
                 grid.setWall(row, col)
             elif event.type == pygame.MOUSEMOTION:
-                if drag:
+                if mouseDragging:
                     pos = pygame.mouse.get_pos()
                     col = pos[0] // (CELL_DIM[0] + CELL_DIM[2])
                     row = pos[1] // (CELL_DIM[1] + CELL_DIM[2])
                     grid.setWall(row, col)
             elif event.type == pygame.MOUSEBUTTONUP:
-                drag = False
+                mouseDragging = False
             elif event.type == pygame.KEYDOWN:
                 # Pressing the r key resets the entire grid
                 if event.key == pygame.K_c:
@@ -64,57 +55,28 @@ def main():
                     grid.reset()
                 # Pressing the s key sets the source square
                 elif event.key == pygame.K_s:
-
-                    # get the row/col of the square where the mouse is
                     pos = pygame.mouse.get_pos()
                     col = pos[0] // (CELL_DIM[0] + CELL_DIM[2])
                     row = pos[1] // (CELL_DIM[1] + CELL_DIM[2])
-
-                    # if the source is not set, set it
-                    if grid.getSource() == (None, None):
-                        grid.setSource(row, col)
-                    # if the source is set
-                    else:
-                        # if the source is the current square, remove it
-                        if grid.getElement(row, col) == 2:
-                            grid.removeSource()
-                        # if the source is not the current square, remove it, and make current square the source
-                        elif grid.getElement(row, col) == 0 or grid.getElement(row, col) == 1:
-                            grid.removeSource()
-                            grid.setSource(row, col)
-                            
+                    grid.toggleSource(row, col)        
                 # Pressing the t key sets the target square
                 elif event.key == pygame.K_t:
-
-                    # get the row/col of the square where the mouse is
                     pos = pygame.mouse.get_pos()
                     col = pos[0] // (CELL_DIM[0] + CELL_DIM[2])
                     row = pos[1] // (CELL_DIM[1] + CELL_DIM[2])
-
-                    # if the target is not set, set it
-                    if grid.getTarget() == (None, None):
-                        grid.setTarget(row, col)
-                    # if the target is set
-                    else:
-                        # if the target is the current square, remove it
-                        if grid.getElement(row, col) == 3:
-                            grid.removeTarget()
-                        # if the target is not the current square, remove it, and make current square the target
-                        elif grid.getElement(row, col) == 0  or grid.getElement(row, col) == 1: 
-                            grid.removeTarget()
-                            grid.setTarget(row, col)
+                    grid.toggleTarget(row, col)
                 elif event.key == pygame.K_1:
                     grid.BFS(screen, clock)
                 elif event.key == pygame.K_2:
                     grid.DFS(screen, clock)
                 elif event.key == pygame.K_3:
                     grid.aStarSearch(screen, clock)
-
-        # tock here and update tick to tock
+        # end for
 
         draw(grid, screen)
 
         clock.tick(60)
+    # end while
 
     pygame.quit()
 
